@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react';
+import { forwardRef, useRef, useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as DD from '@radix-ui/react-dropdown-menu';
 import * as TT from '@radix-ui/react-tooltip';
@@ -7,6 +7,18 @@ import * as TB from '@radix-ui/react-tabs';
 import { MoreHorizontal, X } from 'lucide-react';
 import { cn, asArray, asText } from '../utils.js';
 import { Button, IconButton } from './Button.jsx';
+
+/** Radix only restores focus to a <Trigger>; for controlled dialogs remember the opener ourselves. */
+function useRestoreFocus() {
+  const prev = useRef(null);
+  return {
+    onOpenAutoFocus: () => { prev.current = document.activeElement; },
+    onCloseAutoFocus: (e) => {
+      const el = prev.current;
+      if (el && el !== document.body && el.isConnected && typeof el.focus === 'function') { e.preventDefault(); el.focus(); }
+    },
+  };
+}
 
 /* ================= Modal ================= */
 const modalSizes = {
@@ -24,6 +36,7 @@ const sr = 'absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 
  */
 export function Modal({ open, onOpenChange, defaultOpen, size = 'md', trigger, label, dismissible = true, className, children, overlayClassName }) {
   const block = (e) => { if (!dismissible) e.preventDefault(); };
+  const restore = useRestoreFocus();
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange} defaultOpen={defaultOpen}>
       {trigger ? <Dialog.Trigger asChild>{trigger}</Dialog.Trigger> : null}
@@ -31,6 +44,7 @@ export function Modal({ open, onOpenChange, defaultOpen, size = 'md', trigger, l
         <Dialog.Overlay className={cn('fixed inset-0 z-overlay bg-scrim/50 data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out', overlayClassName)} />
         <Dialog.Content
           aria-describedby={undefined}
+          {...restore}
           onEscapeKeyDown={block}
           onPointerDownOutside={block}
           onInteractOutside={block}
@@ -80,12 +94,13 @@ const sheetSide = {
 };
 /** Sheet / Drawer: side 'left' | 'right'. Same slots as Modal (Sheet.Header/Body/Footer). */
 export function Sheet({ open, onOpenChange, defaultOpen, side = 'right', trigger, label, className, children }) {
+  const restore = useRestoreFocus();
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange} defaultOpen={defaultOpen}>
       {trigger ? <Dialog.Trigger asChild>{trigger}</Dialog.Trigger> : null}
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-overlay bg-scrim/50 data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out" />
-        <Dialog.Content aria-describedby={undefined} className={cn('fixed z-modal flex flex-col border-border bg-surface-overlay text-text shadow-lg focus:outline-none', sheetSide[side] || sheetSide.right, className)}>
+        <Dialog.Content aria-describedby={undefined} {...restore} className={cn('fixed z-modal flex flex-col border-border bg-surface-overlay text-text shadow-lg focus:outline-none', sheetSide[side] || sheetSide.right, className)}>
           {label ? <Dialog.Title className={sr}>{label}</Dialog.Title> : null}
           {children}
         </Dialog.Content>
