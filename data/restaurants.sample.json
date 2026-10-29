@@ -1,0 +1,139 @@
+[
+  {
+    "name": "Johny Hot Dog",
+    "description": "Legendary Indori hot dog and burger stall at the Chappan Dukan (56 Dukan) food street, serving since the 1970s.",
+    "ownerName": "Johny family",
+    "contactPhone": "+91 731 2540000",
+    "address": { "line1": "56 Dukan, Chappan Dukan, Race Course Road", "area": "Chappan Dukan", "city": { "name": "Indore", "state": "Madhya Pradesh" }, "pincode": "452001" },
+    "location": { "lat": 22.7241, "lng": 75.8839 },
+    "type": "non-veg",
+    "category": "street-food",
+    "establishedYear": 1973,
+    "priceForTwo": 250,
+    "cuisines": ["Fast Food", "Street Food"],
+    "amenities": ["Takeaway", "Street Seating"],
+    "timings": [
+      { "day": "monday", "openTime": "11:00", "closeTime": "22:30" },
+      { "day": "tuesday", "openTime": "11:00", "closeTime": "22:30" },
+      { "day": "wednesday", "openTime": "11:00", "closeTime": "22:30" },
+      { "day": "thursday", "openTime": "11:00", "closeTime": "22:30" },
+      { "day": "friday", "openTime": "11:00", "closeTime": "23:00" },
+      { "day": "saturday", "openTime": "11:00", "closeTime": "23:00" },
+      { "day": "sunday", "openTime": "11:00", "closeTime": "23:00" }
+    ],
+    "externalLinks": {
+      "zomatoUrl": "https://www.zomato.com/indore/johny-hot-dog-race-course-road",
+      "swiggyUrl": "https://www.swiggy.com/restaurants/johny-hot-dog-race-course-road-indore",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Johny+Hot+Dog+Chappan+Dukan+Indore"
+    },
+    "isFeatured": true,
+    "isVerified": true
+  },
+  {
+    "name": "Vijay Chaat House",
+    "description": "Iconic chaat corner known for dahi vada, kachori and the classic Indori chaat platter.",
+    "contactPhone": "+91 731 2530001",
+    "address": { "line1": "Chappan Dukan Road, Palasia", "line2": "Near 56 Dukan", "area": "Palasia", "city": { "name": "Indore", "state": "Madhya Pradesh" }, "pincode": "452001" },
+    "location": { "lat": 22.7233, "lng": 75.8832 },
+    "type": "veg",
+    "category": "street-food",
+    "establishedYear": 1958,
+    "priceForTwo": 200,
+    "cuisines": ["Chaat", "Street Food", "North Indian"],
+    "amenities": ["Takeaway"],
+    "timings": [
+      { "day": "monday", "openTime": "10:00", "closeTime": "22:00" },
+      { "day": "tuesday", "openTime": "10:00", "closeTime": "22:00" },
+      { "day": "wednesday", "openTime": "10:00", "closeTime": "22:00" },
+      { "day": "thursday", "openTime": "10:00", "closeTime": "22:00" },
+      { "day": "friday", "openTime": "10:00", "closeTime": "22:00" },
+      { "day": "saturday", "openTime": "10:00", "closeTime": "22:30" },
+      { "day": "sunday", "openTime": "10:00", "closeTime": "22:30" }
+    ],
+    "externalLinks": {
+      "zomatoUrl": "https://www.zomato.com/indore/vijay-chaat-house-palasia",
+      "swiggyUrl": "https://www.swiggy.com/restaurants/vijay-chaat-house-palasia-indore",
+      "mapsUrl": "https://maps.app.goo.gl/VijayChaatHouseIndore"
+    },
+    "isFeatured": true
+  },
+  {
+    "name": "Sarafa Bazaar Night Market",
+    "description": "Jewellery market by day and Indore's famous night food bazaar after 8 PM: bhutte ka kees, garadu, jalebi and more.",
+    "address": { "line1": "Sarafa Bazaar, Rajwada", "area": "Rajwada", "city": { "name": "Indore", "state": "Madhya Pradesh" }, "pincode": "452002" },
+    "location": { "lat": 22.7183, "lng": 75.8553 },
+    "type": "veg",
+    "category": "street-food",
+    "priceForTwo": 300,
+    "cuisines": ["Street Food", "Sweets", "Chaat"],
+    "amenities": ["Street Seating", "Open Late"],
+    "timings": [
+      { "day": "monday", "openTime": "20:00", "closeTime": "02:00" },
+      { "day": "tuesday", "openTime": "20:00", "closeTime": "02:00" },
+      { "day": "wednesday", "openTime": "20:00", "closeTime": "02:00" },
+      { "day": "thursday", "openTime": "20:00", "closeTime": "02:00" },
+      { "day": "friday", "openTime": "20:00", "closeTime": "02:00" },
+      { "day": "saturday", "openTime": "20:00", "closeTime": "02:30" },
+      { "day": "sunday", "openTime": "20:00", "closeTime": "02:30" }
+    ],
+    "externalLinks": {
+      "zomatoUrl": "https://www.zomato.com/indore/sarafa-bazaar-rajwada",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Sarafa+Bazaar+Indore",
+      "instagram": "https://www.instagram.com/explore/tags/sarafabazaar/"
+    },
+    "isFeatured": true,
+    "isVerified": true
+  },
+  {
+    "name": "Joshi Dahi Bada House",
+    "description": "Century-old dahi bada shop near Sarafa, loved for soft vadas in thick sweet curd.",
+    "address": { "line1": "Sarafa Bazaar Road, Rajwada", "area": "Rajwada", "city": { "name": "Indore", "state": "Madhya Pradesh" }, "pincode": "452002" },
+    "location": { "lat": 22.7189, "lng": 75.8561 },
+    "type": "veg",
+    "category": "restaurant",
+    "priceForTwo": 180,
+    "cuisines": ["Chaat", "North Indian"],
+    "amenities": ["Takeaway"],
+    "timings": [
+      { "day": "monday", "openTime": "09:00", "closeTime": "21:30" },
+      { "day": "tuesday", "openTime": "09:00", "closeTime": "21:30" },
+      { "day": "wednesday", "openTime": "09:00", "closeTime": "21:30" },
+      { "day": "thursday", "openTime": "09:00", "closeTime": "21:30" },
+      { "day": "friday", "openTime": "09:00", "closeTime": "21:30" },
+      { "day": "saturday", "openTime": "09:00", "closeTime": "22:00" },
+      { "day": "sunday", "isClosed": true }
+    ],
+    "externalLinks": {
+      "zomatoUrl": "https://www.zomato.com/indore/joshi-dahi-bada-house-rajwada",
+      "mapsUrl": "https://maps.app.goo.gl/JoshiDahiBadaIndore"
+    }
+  },
+  {
+    "name": "Madhuram Sweets",
+    "description": "Popular Indore sweet shop and restaurant: mawa jalebi, kachori-sabzi breakfast and festival sweets.",
+    "contactPhone": "+91 731 4020002",
+    "address": { "line1": "Vijay Nagar Square, Scheme 54", "area": "Vijay Nagar", "city": { "name": "Indore", "state": "Madhya Pradesh" }, "pincode": "452010" },
+    "location": { "lat": 22.7531, "lng": 75.8937 },
+    "type": "veg",
+    "category": "bakery",
+    "establishedYear": 1990,
+    "priceForTwo": 350,
+    "cuisines": ["Sweets", "North Indian", "Bakery"],
+    "amenities": ["Takeaway", "Air Conditioned", "Parking"],
+    "timings": [
+      { "day": "monday", "openTime": "08:00", "closeTime": "22:30" },
+      { "day": "tuesday", "openTime": "08:00", "closeTime": "22:30" },
+      { "day": "wednesday", "openTime": "08:00", "closeTime": "22:30" },
+      { "day": "thursday", "openTime": "08:00", "closeTime": "22:30" },
+      { "day": "friday", "openTime": "08:00", "closeTime": "22:30" },
+      { "day": "saturday", "openTime": "08:00", "closeTime": "23:00" },
+      { "day": "sunday", "openTime": "08:00", "closeTime": "23:00" }
+    ],
+    "externalLinks": {
+      "zomatoUrl": "https://www.zomato.com/indore/madhuram-sweets-vijay-nagar",
+      "swiggyUrl": "https://www.swiggy.com/restaurants/madhuram-sweets-vijay-nagar-indore",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Madhuram+Sweets+Vijay+Nagar+Indore",
+      "website": "https://www.madhuramsweets.example.com"
+    }
+  }
+]

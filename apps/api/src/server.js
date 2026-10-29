@@ -1,10 +1,12 @@
 import { env } from './config/env.js';
 import { connectDB, disconnectDB } from './config/db.js';
 import { ensureDevAdmin } from './services/adminSeed.js';
+import { storage } from './services/storage/index.js';
 import app from './app.js';
 
 await connectDB();
 await ensureDevAdmin();
+console.log(`[storage] driver: ${storage.name}`);
 
 const server = app.listen(env.port, () => {
   console.log(`[api] listening on http://localhost:${env.port} (${env.nodeEnv})`);
