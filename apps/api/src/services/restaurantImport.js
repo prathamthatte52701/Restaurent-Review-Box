@@ -132,8 +132,9 @@ async function processChunk(rows, offset, ctx, results) {
   const bases = [...new Set(ok.filter((v) => !v.row.slug).map((v) => toSlug(v.row.name)))];
   const taken = new Set(existing.map((d) => d.slug));
   if (bases.length) {
-    const rx = new RegExp(`^(${bases.map(escapeRegex).join('|')})(-\\d+)?$`);
-    (await Restaurant.find({ slug: rx }, 'slug').lean()).forEach((d) => taken.add(d.slug));
+    // one anchored-prefix regex per base: each is an index range scan (a single big alternation is not)
+    const $or = bases.map((b) => ({ slug: new RegExp(`^${escapeRegex(b)}(-\\d+)?$`) }));
+    (await Restaurant.find({ $or }, 'slug').lean()).forEach((d) => taken.add(d.slug));
   }
   const freeSlug = (base) => {
     if (!taken.has(base)) return base;
