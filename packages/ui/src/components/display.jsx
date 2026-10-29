@@ -90,6 +90,20 @@ export function Skeleton({ className, circle, ...rest }) {
   return <div aria-hidden="true" className={cn('rrb-skeleton animate-shimmer rounded-md', circle && 'rounded-full', 'h-4 w-full', className)} {...rest} />;
 }
 
+/** Route-level Suspense fallback: header + block skeleton, keeps layout steady while a lazy page loads. */
+export function PageSkeleton({ className }) {
+  return (
+    <div role="status" aria-busy="true" aria-label="Loading page" className={cn('mx-auto w-full max-w-6xl space-y-6 px-4 py-8 sm:px-6 lg:px-8', className)}>
+      <Skeleton className="h-8 w-56" />
+      <Skeleton className="h-4 w-80 max-w-full" />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {[0, 1, 2].map((i) => <Skeleton key={i} className="h-36 rounded-xl" />)}
+      </div>
+      <Skeleton className="h-64 rounded-xl" />
+    </div>
+  );
+}
+
 /* ---------- Logo ---------- */
 export function BrandMark({ size = 32, className }) {
   const s = Number(size) || 32;

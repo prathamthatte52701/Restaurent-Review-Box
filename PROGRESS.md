@@ -100,3 +100,16 @@ Real browser captures (WebP q78, widths capped at 1600px) in `docs/screenshots/`
 **Frontend:** web + admin 401 interceptors map the code to a specific modal ("You were logged out on another device", "Your password was changed...", "Account disabled", "Session expired"); web account dropdown has "Log out of all devices" (`useLogoutAll`). Admin has no logout-all (its logout already revokes server-side).
 **Tests:** `apps/api/tests/sessions.test.js` (13): two-device logout, logout-all, change/reset password, admin deactivate (+reactivate does not revive, self/validation/404), 12 logins -> 10 newest, random-jti / missing-jti / wrong-version / expired JWT, revoked token 10x, exactly one DB op in `protect` (mongoose debug), lastUsedAt throttle, expired pruning, list/delete + no jti/sessions/tokenVersion in any response + cross-user delete 404, revoke with 30 in-flight requests (only 200/401), UA parser. `auth.test.js` forged-token cases updated (need a real jti; non-ObjectId `sub` -> 401 not 400). Full API suite 89/89.
 **Gaps:** no sessions-management UI page yet (API only); sessions of users created before this change are empty, so their old tokens (no jti) get `TOKEN_INVALID` and must log in again.
+
+## Phase 2.5.3 — Code splitting
+
+Every route in both apps is `React.lazy` + `Suspense` with a new `PageSkeleton` (packages/ui) fallback. Admin Dashboard (recharts), MasterPage, RestaurantList, BulkImport, RestaurantForm and MapPicker (Leaflet) are separate chunks; web has no recharts/Leaflet yet (Leaflet lands lazily in Phase 3). `manualChunks`: react, router, query, radix. `npm run analyze -w <app>` writes `dist/stats.html` (rollup-plugin-visualizer, analyze mode only). Prod: `build.sourcemap=false`, esbuild `pure` console.log/info/debug + drop debugger (console.error/warn kept). Bundle grep: 0 `.map` files, 0 `sourceMappingURL`, 0 `console.log`.
+
+Initial load = JS in index.html (entry + modulepreloads), bytes raw / gzip:
+
+| App | Before raw | Before gzip | After raw | After gzip | Target |
+|---|---|---|---|---|---|
+| web | 732.0 kB | 228.9 kB | 643.8 kB | 202.2 kB | <250 kB (gzip met; raw not: react-dom alone is 224 kB) |
+| admin | 1058.8 kB | 317.3 kB | 566.0 kB | 178.4 kB | <400 kB (gzip met; raw 566) |
+
+Admin before: form+map were already lazy (Dashboard/recharts 389 kB / 108 kB gz was in the main chunk); it now loads only on `/`. Playwright on `vite preview` builds: all 11 web and 8 admin routes render non-blank, 0 console errors/warnings.
