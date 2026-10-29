@@ -11,3 +11,37 @@ build
 coverage/
 uploads/
 .mongo-memory/
+
+# secrets / keys
+*.pem
+*.key
+*.p12
+secrets/
+credentials*.json
+service-account*.json
+
+# build + tooling output
+.vite/
+.cache/
+.turbo/
+*.tsbuildinfo
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# uploads + local DB data
+apps/api/uploads/
+apps/api/.mongo-memory/
+.mongo-memory/
+
+# tests / e2e artifacts
+playwright-report/
+test-results/
+screenshots/
+*.api.log
+api.log
+
+# OS / editor
+Thumbs.db
+desktop.ini
+*.swp
