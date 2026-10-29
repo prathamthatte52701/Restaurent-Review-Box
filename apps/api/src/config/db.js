@@ -1,8 +1,12 @@
 import fs from 'node:fs';
+import dns from 'node:dns';
 import path from 'node:path';
 import mongoose from 'mongoose';
 import { env, fatal } from './env.js';
 import '../models/index.js';
+
+// Some local resolvers refuse SRV lookups (mongodb+srv). DNS_SERVERS=8.8.8.8,1.1.1.1 overrides.
+if (process.env.DNS_SERVERS) dns.setServers(process.env.DNS_SERVERS.split(',').map((x) => x.trim()));
 
 const opts = { serverSelectionTimeoutMS: 2500 };
 const uriFile = path.join(env.memoryDbDir, 'uri.txt');
