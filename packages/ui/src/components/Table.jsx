@@ -6,7 +6,7 @@ import { Select } from './forms.jsx';
 /** Semantic styled table. The wrapper scrolls horizontally so the page never does. */
 export function Table({ className, wrapperClassName, ...p }) {
   return (
-    <div className={cn('w-full overflow-x-auto', wrapperClassName)}>
+    <div className={cn('relative w-full overflow-x-auto', wrapperClassName)}>
       <table className={cn('w-full border-collapse text-left text-sm', className)} {...p} />
     </div>
   );

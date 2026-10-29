@@ -35,7 +35,7 @@ export default function App() {
     return (
       <div className="flex min-h-dvh items-center justify-center bg-bg">
         <ErrorState
-          title="Can't reach the server"
+          title="Server unreachable"
           description={hydrateError}
           onRetry={() => { useAuth.setState({ isHydrating: true, hydrateError: undefined }); hydrate(); }}
         />

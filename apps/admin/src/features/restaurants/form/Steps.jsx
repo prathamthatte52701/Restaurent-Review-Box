@@ -112,7 +112,7 @@ export function StepTimings() {
             <li key={t.day} className="flex flex-col gap-2 p-3 sm:flex-row sm:items-center sm:gap-4">
               <span className="w-28 text-sm font-medium">{cap(t.day)}</span>
               <Controller control={control} name={`timings.${i}.isClosed`} render={({ field }) => (
-                <Switch checked={field.value} onCheckedChange={(v) => field.onChange(v)} label={field.value ? 'Closed' : 'Open'} className="w-28" />
+                <Switch checked={!field.value} onCheckedChange={(v) => field.onChange(!v)} label={field.value ? 'Closed' : 'Open'} aria-label={cap(t.day) + ' open'} className="w-28" />
               )} />
               {t.isClosed ? <span className="flex-1" /> : (
                 <div className="flex flex-1 flex-wrap items-start gap-2">
