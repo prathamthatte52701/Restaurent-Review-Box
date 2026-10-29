@@ -113,3 +113,7 @@ Initial load = JS in index.html (entry + modulepreloads), bytes raw / gzip:
 | admin | 1058.8 kB | 317.3 kB | 566.0 kB | 178.4 kB | <400 kB (gzip met; raw 566) |
 
 Admin before: form+map were already lazy (Dashboard/recharts 389 kB / 108 kB gz was in the main chunk); it now loads only on `/`. Playwright on `vite preview` builds: all 11 web and 8 admin routes render non-blank, 0 console errors/warnings.
+
+## Phase 2.5.5 - real Indore seed data
+
+`data/restaurants.indore.json`: Shreemaya Celebrity, Bapu Ki Kutia - Vijay Nagar, Domino's Pizza - Sayaji Circle, Pizza Hut - Malhar Mega Mall, McDonald's - Malhar Mega Mall (all Indore, Vijay Nagar area). Sources and a NEEDS VERIFICATION table (all priceForTwo values are estimates; hours from Jan 2024 directory data; no Zomato/Swiggy/Maps links) are in `docs/seed-sources.md`. Seeded to Atlas: dry-run 5 created, real 5 created, rerun 5 skipped (no duplicates); 3 old placeholder rows removed from Atlas. Verified via API (list + by slug): all fields persisted, 7 timings each, all coords inside Indore bounds. Broken-row dry run: 1 good row created, broken row skipped with `location.lat: ...; priceForTwo: must be greater than 0; address.line1: Required`. `restaurants.sample.json` kept (used by bulk.test.js).

@@ -52,4 +52,4 @@ exact validation reasons (`priceForTwo: priceForTwo must be greater than 0; ...`
 - `dryRun` / `--dry-run` computes the same results but writes nothing (including cuisines/cities).
 - `autoCreate:false` skips rows referencing unknown cuisines/amenities/cities.
 
-A working example is `data/restaurants.sample.json`.
+Working examples: `data/restaurants.indore.json` (real data, sources in `docs/seed-sources.md`) and `data/restaurants.sample.json` (test fixture with placeholder values only).

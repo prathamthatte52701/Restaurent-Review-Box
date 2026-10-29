@@ -1,0 +1,326 @@
+[
+  {
+    "name": "Shreemaya Celebrity",
+    "address": {
+      "line1": "Shekhar Planet, Bombay Hospital Service Road, behind Reliance Fresh",
+      "line2": "Scheme 54 PU4",
+      "area": "Vijay Nagar",
+      "city": {
+        "name": "Indore",
+        "state": "Madhya Pradesh"
+      },
+      "pincode": "452010"
+    },
+    "location": {
+      "lat": 22.7398432,
+      "lng": 75.8924874
+    },
+    "contactPhone": "+91 96300 66656",
+    "type": "veg",
+    "category": "restaurant",
+    "priceForTwo": 600,
+    "cuisines": [
+      "Chinese",
+      "Fast Food",
+      "South Indian",
+      "Bakery"
+    ],
+    "timings": [
+      {
+        "day": "monday",
+        "openTime": "10:00",
+        "closeTime": "21:00"
+      },
+      {
+        "day": "tuesday",
+        "openTime": "10:00",
+        "closeTime": "21:00"
+      },
+      {
+        "day": "wednesday",
+        "openTime": "10:00",
+        "closeTime": "21:00"
+      },
+      {
+        "day": "thursday",
+        "openTime": "10:00",
+        "closeTime": "21:00"
+      },
+      {
+        "day": "friday",
+        "openTime": "10:00",
+        "closeTime": "21:00"
+      },
+      {
+        "day": "saturday",
+        "openTime": "10:00",
+        "closeTime": "21:00"
+      },
+      {
+        "day": "sunday",
+        "openTime": "10:00",
+        "closeTime": "21:00"
+      }
+    ]
+  },
+  {
+    "name": "Bapu Ki Kutia - Vijay Nagar",
+    "description": "Pure vegetarian fine dining specialising in North Indian cuisine.",
+    "address": {
+      "line1": "Opposite Prestige College, near Bombay Hospital",
+      "area": "Vijay Nagar",
+      "city": {
+        "name": "Indore",
+        "state": "Madhya Pradesh"
+      },
+      "pincode": "452010"
+    },
+    "location": {
+      "lat": 22.7543432,
+      "lng": 75.9023991
+    },
+    "contactPhone": "+91 731 499 4422",
+    "contactEmail": "bkk1.1964@gmail.com",
+    "type": "veg",
+    "category": "restaurant",
+    "priceForTwo": 600,
+    "cuisines": [
+      "North Indian",
+      "Punjabi"
+    ],
+    "timings": [
+      {
+        "day": "monday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "tuesday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "wednesday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "thursday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "friday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "saturday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "sunday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      }
+    ],
+    "externalLinks": {
+      "website": "https://www.bapukikutia.in",
+      "instagram": "https://www.instagram.com/bapukikutia/"
+    }
+  },
+  {
+    "name": "Domino's Pizza - Sayaji Circle, Vijay Nagar",
+    "address": {
+      "line1": "Prime House, Ground Floor, GF 32, Meghdoot Park Road",
+      "line2": "Sayaji Circle",
+      "area": "Vijay Nagar",
+      "city": {
+        "name": "Indore",
+        "state": "Madhya Pradesh"
+      },
+      "pincode": "452010"
+    },
+    "location": {
+      "lat": 22.7524151,
+      "lng": 75.8910855
+    },
+    "type": "both",
+    "category": "restaurant",
+    "priceForTwo": 400,
+    "cuisines": [
+      "Pizza",
+      "Italian",
+      "Fast Food"
+    ],
+    "amenities": [
+      "Takeaway",
+      "Home Delivery"
+    ],
+    "timings": [
+      {
+        "day": "monday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "tuesday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "wednesday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "thursday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "friday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "saturday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "sunday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      }
+    ]
+  },
+  {
+    "name": "Pizza Hut - Malhar Mega Mall, Vijay Nagar",
+    "address": {
+      "line1": "Anchor No 1, 2nd Floor, Malhar Mega Mall, AB Road",
+      "area": "Vijay Nagar",
+      "city": {
+        "name": "Indore",
+        "state": "Madhya Pradesh"
+      },
+      "pincode": "452010"
+    },
+    "location": {
+      "lat": 22.7447525,
+      "lng": 75.8947744
+    },
+    "contactPhone": "+91 86556 15996",
+    "type": "both",
+    "category": "restaurant",
+    "priceForTwo": 600,
+    "cuisines": [
+      "Pizza"
+    ],
+    "amenities": [
+      "Takeaway",
+      "Home Delivery"
+    ],
+    "timings": [
+      {
+        "day": "monday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "tuesday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "wednesday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "thursday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "friday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "saturday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "sunday",
+        "openTime": "11:00",
+        "closeTime": "23:00"
+      }
+    ]
+  },
+  {
+    "name": "McDonald's - Malhar Mega Mall, Vijay Nagar",
+    "address": {
+      "line1": "Shop No 12, Ground Floor, Malhar Mega Mall, AB Road",
+      "area": "Vijay Nagar",
+      "city": {
+        "name": "Indore",
+        "state": "Madhya Pradesh"
+      },
+      "pincode": "452010"
+    },
+    "location": {
+      "lat": 22.7453457,
+      "lng": 75.8943168
+    },
+    "contactPhone": "+91 89283 04133",
+    "type": "both",
+    "category": "restaurant",
+    "priceForTwo": 450,
+    "cuisines": [
+      "Fast Food"
+    ],
+    "amenities": [
+      "Home Delivery"
+    ],
+    "timings": [
+      {
+        "day": "monday",
+        "openTime": "10:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "tuesday",
+        "openTime": "10:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "wednesday",
+        "openTime": "11:30",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "thursday",
+        "openTime": "10:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "friday",
+        "openTime": "10:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "saturday",
+        "openTime": "10:00",
+        "closeTime": "23:00"
+      },
+      {
+        "day": "sunday",
+        "openTime": "10:00",
+        "closeTime": "23:00"
+      }
+    ]
+  }
+]
