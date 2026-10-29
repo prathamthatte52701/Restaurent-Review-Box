@@ -1,0 +1,2 @@
+/** Inline script (run before React). Mirrors themeStore logic: try/catch, validate, fall back to 'system'. */
+export const themeInitScript = `(function(){try{var m;try{m=localStorage.getItem('rrb-theme')}catch(e){}if(m!=='light'&&m!=='dark'&&m!=='system')m='system';var d=m==='dark'||(m==='system'&&window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.setAttribute('data-theme',d?'dark':'light')}catch(e){document.documentElement.setAttribute('data-theme','light')}})();`;

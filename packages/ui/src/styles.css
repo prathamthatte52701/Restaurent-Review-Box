@@ -1,0 +1,108 @@
+@import '@fontsource-variable/fraunces';
+@import '@fontsource-variable/inter';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design tokens: space-separated RGB channels so Tailwind alpha utilities work. */
+:root {
+  color-scheme: light;
+  --bg: 249 246 240;
+  --surface: 254 252 248;
+  --surface-raised: 255 255 255;
+  --surface-overlay: 255 255 255;
+  --border: 232 225 213;
+  --border-strong: 207 197 181;
+  --text: 31 26 21;
+  --text-muted: 112 103 91;
+  --primary: 180 83 9;
+  --primary-hover: 154 68 5;
+  --primary-fg: 255 251 245;
+  --primary-soft: 252 238 218;
+  --success: 40 122 77;
+  --success-fg: 255 255 255;
+  --success-soft: 226 244 233;
+  --warning: 161 98 7;
+  --warning-fg: 255 255 255;
+  --warning-soft: 252 240 205;
+  --danger: 190 36 52;
+  --danger-fg: 255 255 255;
+  --danger-soft: 252 229 230;
+  --ring: 180 83 9;
+  --shadow: 60 40 15;
+  --scrim: 31 22 12;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  /* four real elevation steps: bg < surface < surface-raised < surface-overlay */
+  --bg: 19 17 15;
+  --surface: 27 24 21;
+  --surface-raised: 36 32 28;
+  --surface-overlay: 46 41 36;
+  --border: 52 47 41;
+  --border-strong: 82 75 66;
+  --text: 244 238 229;
+  --text-muted: 162 153 140;
+  --primary: 238 150 56;
+  --primary-hover: 249 170 84;
+  --primary-fg: 34 20 6;
+  --primary-soft: 58 38 19;
+  --success: 96 200 140;
+  --success-fg: 10 36 22;
+  --success-soft: 24 48 36;
+  --warning: 236 188 80;
+  --warning-fg: 40 28 4;
+  --warning-soft: 56 45 18;
+  --danger: 244 114 120;
+  --danger-fg: 48 8 12;
+  --danger-soft: 62 28 31;
+  --ring: 238 150 56;
+  --shadow: 0 0 0;
+  --scrim: 0 0 0;
+}
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    @apply bg-bg font-sans text-base text-text antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, h4 { @apply font-display; }
+  ::selection { background: rgb(var(--primary) / 0.25); }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--ring));
+    outline-offset: 2px;
+  }
+  /* inputs draw their own ring */
+  input:focus-visible, textarea:focus-visible, select:focus-visible { outline: none; }
+
+  * { scrollbar-width: thin; scrollbar-color: rgb(var(--border-strong)) transparent; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--border-strong));
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-track { background: transparent; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .rrb-skeleton {
+    background: linear-gradient(90deg, rgb(var(--border) / 0.55) 25%, rgb(var(--border) / 1) 50%, rgb(var(--border) / 0.55) 75%);
+    background-size: 200% 100%;
+  }
+}
