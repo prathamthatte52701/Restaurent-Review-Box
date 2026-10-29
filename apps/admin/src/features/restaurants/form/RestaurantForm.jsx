@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, Check, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
 import { Button, Card, ErrorState, PageHeader, Skeleton, notify, cn } from '@rrb/ui';
 import { api } from '../../../lib/api.js';
+import { useUnsavedGuard } from '../../../lib/useUnsavedGuard.js';
 import { emptyValues, fromServer, schema, STEPS, toPayload } from '../../../lib/restaurantForm.js';
 import { StepBasics, StepLinks, StepLocation, StepTags, StepTimings } from './Steps.jsx';
 import MediaStep from './MediaStep.jsx';
@@ -67,7 +68,8 @@ function Wizard({ id: routeId, server }) {
     mode: 'onChange',
     defaultValues: server ? fromServer(server) : { ...emptyValues(), ...(draft?.values || {}) },
   });
-  const { trigger, getValues, setError, watch, formState: { errors } } = methods;
+  const { trigger, getValues, setError, watch, reset, formState: { errors, isDirty } } = methods;
+  const allowLeave = useUnsavedGuard(isDirty);
 
   useEffect(() => {
     if (editing) return undefined;
@@ -113,9 +115,11 @@ function Wizard({ id: routeId, server }) {
           qc.invalidateQueries({ queryKey: ['restaurant', doc._id] });
           if (!id) {
             writeDraft(null);
+            allowLeave();
             nav(`/restaurants/${doc._id}/edit?step=5`, { replace: true, state: { created: true } });
             return;
           }
+          reset(getValues()); // saved: current values become the new baseline (not dirty)
         } catch (e) {
           applyServerErrors(e);
           return;
@@ -142,6 +146,8 @@ function Wizard({ id: routeId, server }) {
       qc.invalidateQueries({ queryKey: ['admin-stats'] });
       qc.removeQueries({ queryKey: ['restaurant', id] });
       writeDraft(null);
+      reset(getValues());
+      allowLeave();
       await notify.success('Restaurant saved', `"${getValues('name')}" is up to date.`);
       nav('/restaurants');
     } catch (e) {

@@ -17,3 +17,4 @@ export const loginLimiter = make(15 * MIN, env.rate.login, 'Too many login attem
 export const registerLimiter = make(60 * MIN, env.rate.register, 'Too many sign-ups from this network. Try again later.');
 export const forgotLimiter = make(60 * MIN, env.rate.forgot, 'Too many reset requests. Try again later.');
 export const resendLimiter = make(10 * MIN, env.rate.resend, 'Too many code requests. Wait a few minutes.');
+export const mapLinkLimiter = make(10 * MIN, 30, 'Too many map link lookups. Try again in a few minutes.');

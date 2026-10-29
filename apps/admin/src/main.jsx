@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider, MutationCache } from '@tanstack/react-query';
 import { TooltipProvider, NotificationProvider, ErrorBoundary, notify } from '@rrb/ui';
 import '@rrb/ui/styles.css';
@@ -20,15 +20,16 @@ const queryClient = new QueryClient({
   }),
 });
 
+// data router (required by useBlocker); App still declares its own <Routes> under the splat route
+const router = createBrowserRouter([{ path: '*', element: <App /> }]);
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <NotificationProvider>
           <ErrorBoundary>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
+            <RouterProvider router={router} />
           </ErrorBoundary>
         </NotificationProvider>
       </TooltipProvider>

@@ -1,21 +1,25 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import { Badge, Button, DataTable, FormField, Input, Modal, PageHeader, Select, Switch, notify } from '@rrb/ui';
 import { api } from '../../lib/api.js';
+import { confirmDiscard, useUnsavedGuard } from '../../lib/useUnsavedGuard.js';
 import { ICON_OPTIONS, iconFor } from '../../lib/icons.js';
 
 const DEFAULTS = { name: '', state: '', icon: '', isActive: true };
 
-function MasterForm({ config, item, onClose }) {
+function MasterForm({ config, item, onClose, dirtyRef }) {
   const qc = useQueryClient();
   const editing = Boolean(item);
-  const { register, control, handleSubmit, setError, formState: { errors } } = useForm({
+  const { register, control, handleSubmit, setError, formState: { errors, isDirty } } = useForm({
     resolver: zodResolver(config.schema),
     defaultValues: { ...DEFAULTS, ...Object.fromEntries(config.fields.map((f) => [f.name, item?.[f.name] ?? ''])), isActive: item?.isActive ?? true },
   });
+
+  useUnsavedGuard(isDirty);
+  dirtyRef.current = isDirty;
 
   const save = useMutation({
     meta: { silent: true },
@@ -23,6 +27,7 @@ function MasterForm({ config, item, onClose }) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: [config.key] });
       qc.invalidateQueries({ queryKey: ['masters', config.key] });
+      dirtyRef.current = false;
       onClose();
       notify.success(`${config.singular} ${editing ? 'updated' : 'created'}`, `The ${config.singular.toLowerCase()} was saved successfully.`);
     },
@@ -49,7 +54,7 @@ function MasterForm({ config, item, onClose }) {
         />
       </Modal.Body>
       <Modal.Footer>
-        <Button type="button" variant="ghost" onClick={onClose}>Cancel</Button>
+        <Button type="button" variant="ghost" onClick={async () => { if (await confirmDiscard(isDirty)) onClose(); }}>Cancel</Button>
         <Button type="submit" loading={save.isPending}>{editing ? 'Save changes' : `Create ${config.singular.toLowerCase()}`}</Button>
       </Modal.Footer>
     </form>
@@ -64,6 +69,7 @@ export default function MasterPage({ config }) {
 function MasterInner({ config }) {
   const qc = useQueryClient();
   const [params, setParams] = useState({ search: '', sort: 'name', order: 'asc', page: 1, limit: 10 });
+  const dirtyRef = useRef(false);
   const [modal, setModal] = useState(null); // {item?} | null
 
   const query = useQuery({
@@ -152,9 +158,9 @@ function MasterInner({ config }) {
           { label: 'Delete', icon: <Trash2 />, danger: true, onSelect: () => remove(r) },
         ]}
       />
-      <Modal open={Boolean(modal)} onOpenChange={(o) => !o && setModal(null)}>
+      <Modal open={Boolean(modal)} onOpenChange={async (o) => { if (!o && (await confirmDiscard(dirtyRef.current))) { dirtyRef.current = false; setModal(null); } }}>
         <Modal.Header title={modal?.item ? `Edit ${config.singular.toLowerCase()}` : `New ${config.singular.toLowerCase()}`} description={modal?.item ? <Badge variant={modal.item.isActive ? 'success' : 'neutral'} dot>{modal.item.isActive ? 'Active' : 'Inactive'}</Badge> : undefined} />
-        {modal ? <MasterForm config={config} item={modal.item} onClose={() => setModal(null)} /> : null}
+        {modal ? <MasterForm config={config} item={modal.item} onClose={() => { dirtyRef.current = false; setModal(null); }} dirtyRef={dirtyRef} /> : null}
       </Modal>
     </>
   );

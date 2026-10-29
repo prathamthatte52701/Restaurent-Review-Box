@@ -4,6 +4,7 @@ import { Copy, MapPinned, Moon } from 'lucide-react';
 import { Button, FormField, Input, Select, Skeleton, Switch, Textarea } from '@rrb/ui';
 import { CATEGORIES, TYPES } from '../../../lib/constants.js';
 import { parseMapsUrl } from '../../../lib/mapsUrl.js';
+import { api } from '../../../lib/api.js';
 import { useMasters } from '../../../lib/useMasters.js';
 import { MultiSelect } from '../../../components/MultiSelect.jsx';
 
@@ -37,20 +38,32 @@ export function StepLocation() {
   const [url, setUrl] = useState('');
   const [urlErr, setUrlErr] = useState('');
   const [urlOk, setUrlOk] = useState('');
+  const [urlBusy, setUrlBusy] = useState(false);
   const setPos = (a, b) => {
     setValue('lat', String(a), { shouldValidate: true, shouldDirty: true });
     setValue('lng', String(b), { shouldValidate: true, shouldDirty: true });
   };
-  const apply = () => {
+  const apply = async () => {
     setUrlOk('');
+    let p;
     try {
-      const p = parseMapsUrl(url);
-      setPos(p.lat, p.lng);
-      setUrlErr('');
-      setUrlOk(`Pin moved to ${p.lat}, ${p.lng}`);
+      p = parseMapsUrl(url); // long links resolve locally, no request
     } catch (err) {
-      setUrlErr(err.message);
+      // short links (maps.app.goo.gl) and anything else Google-ish: ask the server to follow the redirects
+      if (!/google\.|goo\.gl/i.test(url)) { setUrlErr(err.message); return; }
+      setUrlBusy(true);
+      try {
+        p = (await api.post('/utils/resolve-map-link', { url: url.trim() })).data;
+      } catch (e2) {
+        setUrlErr(e2.message || 'Could not resolve that link. Click the map to place the pin instead.');
+        return;
+      } finally {
+        setUrlBusy(false);
+      }
     }
+    setPos(p.lat, p.lng);
+    setUrlErr('');
+    setUrlOk(`Pin moved to ${p.lat}, ${p.lng}${p.placeName ? ` (${p.placeName})` : ''}`);
   };
   return (
     <div className="flex flex-col gap-5">
@@ -65,13 +78,13 @@ export function StepLocation() {
       </div>
 
       <div className="flex flex-col gap-3 rounded-lg border border-border p-4">
-        <FormField label="Paste a Google Maps link" hint="Reads coordinates from links like .../@22.7196,75.8577,15z" error={urlErr || undefined}>
+        <FormField label="Paste a Google Maps link" hint="Works with full links and short maps.app.goo.gl links" error={urlErr || undefined}>
           <Input
             value={url}
             onChange={(ev) => { setUrl(ev.target.value); setUrlErr(''); setUrlOk(''); }}
             onKeyDown={(ev) => { if (ev.key === 'Enter') { ev.preventDefault(); apply(); } }}
             placeholder="https://www.google.com/maps/place/.../@22.7196,75.8577,15z"
-            rightAdornment={<Button type="button" size="sm" variant="secondary" onClick={apply} leftIcon={<MapPinned className="h-4 w-4" />} className="-mr-2">Use link</Button>}
+            rightAdornment={<Button type="button" size="sm" variant="secondary" loading={urlBusy} onClick={apply} leftIcon={<MapPinned className="h-4 w-4" />} className="-mr-2">Use link</Button>}
           />
         </FormField>
         {urlOk ? <p role="status" className="text-xs font-medium text-success">{urlOk}</p> : null}
