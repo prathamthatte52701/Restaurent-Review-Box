@@ -76,3 +76,11 @@ Defects found and fixed during testing: maps URL regexes (escaping), Leaflet til
 **Gaps:** no committed automated UI suite (scripts live in scratchpad); optional fields cannot be cleared via the API (blank = undefined); short maps.app.goo.gl links cannot be resolved client-side (clear error instead); Reviews/Users pages are "Soon"; main JS chunk ~1MB (recharts) - Dashboard not code-split; seed script display not re-verified against the seeded dataset (UI shows whatever the API returns); beforeunload guard for unsaved edit-mode changes not implemented.
 
 **Commands:** `npm run dev:admin` (needs API on VITE_API_URL, default http://localhost:5000/api/v1); `npm run build -w @rrb/admin`; `node apps/admin/src/lib/mapsUrl.check.js`. Dev admin credentials come from apps/api/.env (ADMIN_EMAIL/ADMIN_PASSWORD), not hardcoded in admin.
+
+## Screenshots
+
+Real browser captures (WebP q78, widths capped at 1600px) in `docs/screenshots/`, about 4.5MB total. 768px variants were dropped to stay under budget; light+dark pairs are kept at 1440 and 375.
+
+- `docs/screenshots/phase-0/` - UI kit and shells: `light|dark-1440|375` (kit gallery), `ui-kit-*`, `home-*`, `404-*`, `restaurants-*` placeholders, `confirm-light`, `notify-light`, `datatable-selected`, `user-menu`.
+- `docs/screenshots/phase-1/` - Auth: login, signup, forgot, reset, reset-bad, verify-otp (light/dark x 1440/375), plus `signup-errors`, `forgot-sent`, `verify-otp-live`, `change-password-done`, `rate-limit-modal`, `api-down-login`, `api-down-session`, `home-logged-in`.
+- `docs/screenshots/phase-2/` - Admin: `50-*` dashboard, masters (cities), restaurants list, form steps 1-6, bulk import, 404 and `52-*` login (light/dark x 1440/375), `51-drawer-*`, and flow shots `01-03` login/dashboard, `10-14` masters CRUD (cities/cuisines/amenities), `20-26` wizard steps, `30-32` list/filter/delete, `40-41` bulk import, `60-63` failure states.

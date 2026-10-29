@@ -38,6 +38,7 @@ apps/api/.mongo-memory/
 playwright-report/
 test-results/
 screenshots/
+!docs/screenshots/
 *.api.log
 api.log
 
