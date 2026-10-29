@@ -1,0 +1,17 @@
+{
+  "name": "restaurant-review-box",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev:api": "npm run dev -w @rrb/api",
+    "dev:web": "npm run dev -w @rrb/web",
+    "dev:admin": "npm run dev -w @rrb/admin",
+    "dev": "npm-run-all --parallel dev:api dev:web dev:admin",
+    "build": "npm run build -w @rrb/web && npm run build -w @rrb/admin",
+    "seed": "npm run seed -w @rrb/api --",
+    "test": "npm test -w @rrb/api"
+  },
+  "devDependencies": { "npm-run-all": "^4.1.5" }
+}
