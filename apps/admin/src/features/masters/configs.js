@@ -7,7 +7,7 @@ const icon = z.string().trim().max(60).optional();
 export const masterConfigs = {
   cities: {
     key: 'cities', path: 'cities', endpoint: '/cities', singular: 'City', plural: 'Cities',
-    description: 'Cities restaurants can be located in.',
+    description: 'Cities where restaurants can be listed.',
     fields: [{ name: 'name', label: 'Name', required: true }, { name: 'state', label: 'State', hint: 'e.g. Madhya Pradesh' }],
     schema: z.object({ name, state: z.string().trim().max(80).optional(), isActive: z.boolean() }),
     columns: ['name', 'state'],

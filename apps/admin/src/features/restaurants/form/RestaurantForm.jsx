@@ -64,7 +64,7 @@ function Wizard({ id: routeId, server }) {
 
   const methods = useForm({
     resolver: zodResolver(schema),
-    mode: 'onTouched',
+    mode: 'onChange',
     defaultValues: server ? fromServer(server) : { ...emptyValues(), ...(draft?.values || {}) },
   });
   const { trigger, getValues, setError, watch, formState: { errors } } = methods;

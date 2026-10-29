@@ -1,0 +1,3 @@
+/* Tailwind preflight makes img { max-width: 100% }, which corrupts Leaflet tiles/markers. */
+.leaflet-container img { max-width: none !important; max-height: none !important; }
+.leaflet-container { font: inherit; }

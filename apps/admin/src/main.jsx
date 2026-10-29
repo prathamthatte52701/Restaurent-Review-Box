@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider, MutationCache } from '@tanstack/react
 import { TooltipProvider, NotificationProvider, ErrorBoundary, notify } from '@rrb/ui';
 import '@rrb/ui/styles.css';
 import 'leaflet/dist/leaflet.css';
+import './index.css';
 import App from './App.jsx';
 
 const queryClient = new QueryClient({
