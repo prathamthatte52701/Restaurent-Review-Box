@@ -7,6 +7,9 @@ import { City, Cuisine, Amenity } from '../models/index.js';
 import Restaurant, { costBracketOf } from '../models/Restaurant.js';
 import { storeImages, removeImages } from '../services/imageService.js';
 import { importRestaurants } from '../services/restaurantImport.js';
+import * as discovery from '../services/discovery.js';
+
+const clock = (req) => req.app.locals.now?.() ?? new Date(); // tests inject a fixed clock
 
 const MAX_GALLERY = 10;
 const isObjectId = (v) => /^[a-f\d]{24}$/i.test(v);
@@ -47,8 +50,28 @@ const load = async (id) => {
   return doc;
 };
 
-export const list = asyncHandler(async (req, res) => {
-  const q = req.validated.query;
+/** Public discovery listing (3.1): active only, facets, combinable filters. */
+const publicList = asyncHandler(async (req, res) => {
+  const out = await discovery.publicList(req.validated.query, clock(req));
+  res.json({ success: true, ...out, message: 'Restaurants' });
+});
+
+export const nearby = asyncHandler(async (req, res) => {
+  const out = await discovery.nearby(req.validated.query, clock(req));
+  res.json({ success: true, ...out, message: 'Nearby restaurants' });
+});
+
+export const suggest = asyncHandler(async (req, res) => {
+  sendOk(res, await discovery.suggest(req.validated.query.q), 'Suggestions');
+});
+
+/** Admin list (?includeInactive=true, admin token enforced by the route): unchanged behaviour. */
+const adminList = asyncHandler(async (req, res) => {
+  const q = { ...req.validated.query };
+  q.cuisine ??= q.cuisines;
+  q.amenity ??= q.amenities;
+  q.costBracket ??= q.cost;
+  q.isFeatured ??= q.featured;
   const filter = {};
   if (q.includeInactive === 'true') {
     if (q.isActive) filter.isActive = q.isActive === 'true';
@@ -72,10 +95,12 @@ export const list = asyncHandler(async (req, res) => {
   sendList(res, out, 'Restaurants');
 });
 
+export const list = (req, res, next) => (req.validated.query.includeInactive === 'true' ? adminList : publicList)(req, res, next);
+
 export const getOne = asyncHandler(async (req, res) => {
   const doc = await Restaurant.findOne(byIdOrSlug(req.validated.params.id)).populate(POPULATE).lean();
   if (!doc || (!doc.isActive && req.user?.role !== 'admin')) throw ApiError.notFound('Restaurant not found');
-  sendOk(res, doc);
+  sendOk(res, await discovery.detailPayload(doc, { isAdmin: req.user?.role === 'admin', now: clock(req) }));
 });
 
 export const create = asyncHandler(async (req, res) => {

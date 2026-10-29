@@ -115,6 +115,26 @@ export const restaurantListQuery = listQuery.extend({
   costBracket: csv(BRACKETS).optional(),
   isFeatured: bool.optional(),
   isActive: bool.optional(),
+  // public discovery (3.1); aliases: cuisine=cuisines, amenity=amenities, costBracket=cost, isFeatured=featured
+  cuisines: z.string().max(500).optional(),
+  amenities: z.string().max(500).optional(),
+  cost: csv(BRACKETS).optional(),
+  featured: bool.optional(),
+  openNow: bool.optional(),
+  minRating: z.string().max(10).refine((s) => Number.isFinite(Number(s)) && Number(s) >= 0 && Number(s) <= 5, 'minRating must be between 0 and 5').optional(),
+});
+
+const num = (min, max, msg) =>
+  z.string().max(30).refine((s) => s.trim() !== '' && Number.isFinite(Number(s)) && Number(s) >= min && Number(s) <= max, msg).transform(Number);
+
+export const nearbyQuery = restaurantListQuery.extend({
+  lat: num(-90, 90, 'lat must be a number between -90 and 90'),
+  lng: num(-180, 180, 'lng must be a number between -180 and 180'),
+  radius: z.string().max(30).refine((s) => Number.isFinite(Number(s)) && Number(s) > 0, 'radius (km) must be greater than 0').optional(),
+});
+
+export const suggestQuery = z.object({
+  q: z.preprocess((v) => (typeof v === 'string' ? v.trim().slice(0, 100) : v), z.string().min(1, 'q is required')),
 });
 
 // ---------- bulk import ----------

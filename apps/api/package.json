@@ -9,6 +9,8 @@
     "start": "node src/server.js",
     "seed": "node src/scripts/seed.js",
     "seed:admin": "node src/scripts/seed-admin.js",
+    "indexes": "node src/scripts/indexes.js",
+    "explain": "node src/scripts/explain.js",
     "test": "node --test --test-concurrency=1 \"tests/**/*.test.js\""
   },
   "dependencies": {

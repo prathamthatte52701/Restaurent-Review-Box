@@ -123,7 +123,7 @@ test('gallery: max 10 total (sequential + single request), 15 at once blocked, r
   assert.equal(fileCount(), base + 10, 'rolled-back uploads removed from disk');
 
   // reorder
-  const g = (await ctx.request.get(url())).body.data.gallery;
+  const g = (await ctx.request.get(url()).set(auth(admin))).body.data.gallery;
   const reversed = g.map((x) => x._id).reverse();
   const re = await ctx.request.patch(url('/gallery/reorder')).set(auth(admin)).send({ order: reversed });
   assert.equal(re.status, 200);
@@ -144,7 +144,7 @@ test('deleting a restaurant removes its cover and gallery files from disk', asyn
   const before = fileCount();
   await ctx.request.patch(url('/cover')).set(auth(admin)).attach('image', await jpeg(), 'c.jpg');
   await ctx.request.post(url('/gallery')).set(auth(admin)).attach('images', await jpeg(), 'a.jpg').attach('images', await png(), 'b.png');
-  const doc = (await ctx.request.get(url())).body.data;
+  const doc = (await ctx.request.get(url()).set(auth(admin))).body.data;
   const ids = [doc.coverImage.publicId, ...doc.gallery.map((x) => x.publicId)];
   assert.equal(ids.length, 3);
   assert.ok(ids.every(onDisk));

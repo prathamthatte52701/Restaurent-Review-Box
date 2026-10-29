@@ -71,5 +71,6 @@ restaurantSchema.index({ ratingAvg: -1 });
 restaurantSchema.index({ priceForTwo: 1 });
 restaurantSchema.index({ isFeatured: 1, isActive: 1 });
 restaurantSchema.index({ createdAt: -1 });
+restaurantSchema.index({ 'address.area': 1, isActive: 1 }); // search suggest: area prefix
 
 export default mongoose.models.Restaurant || mongoose.model('Restaurant', restaurantSchema);

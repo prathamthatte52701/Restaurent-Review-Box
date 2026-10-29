@@ -10,6 +10,7 @@ const r = Router();
 const admin = [protect, restrictTo('admin')]; // always before multer so anonymous users never get to buffer uploads
 
 r.get('/', validate({ query: v.restaurantListQuery }), adminForInactive, c.list);
+r.get('/nearby', validate({ query: v.nearbyQuery }), c.nearby); // before /:id
 r.post('/bulk-import', ...admin, validate({ body: v.bulkBody }), c.bulkImport);
 r.get('/:id', optionalAuth, validate({ params: idOrSlugParam }), c.getOne);
 
