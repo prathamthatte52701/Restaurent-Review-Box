@@ -15,7 +15,7 @@ const byIdOrSlug = (v) => (isObjectId(v) ? { _id: v } : { slug: String(v).toLowe
 export function makeMasterController({ Model, label, usageField, withState = false }) {
   const dupFilter = (d) => ({
     name: new RegExp(`^${escapeRegex(d.name)}$`, 'i'),
-    ...(withState && { state: new RegExp(`^${escapeRegex(d.state || '')}$`, 'i') }),
+    ...(withState && { state: d.state ? new RegExp(`^${escapeRegex(d.state)}$`, 'i') : { $in: [null, ''] } }),
   });
 
   const load = async (id) => {
@@ -53,8 +53,8 @@ export function makeMasterController({ Model, label, usageField, withState = fal
     update: asyncHandler(async (req, res) => {
       const doc = await load(req.validated.params.id);
       const d = req.validated.body;
-      const next = { name: d.name ?? doc.name, state: d.state ?? doc.state };
-      if ((d.name || d.state !== undefined) && (await Model.exists({ ...dupFilter(next), _id: { $ne: doc._id } }))) {
+      const next = { name: d.name ?? doc.name, state: d.state !== undefined ? d.state : doc.state };
+      if ((d.name !== undefined || d.state !== undefined) && (await Model.exists({ ...dupFilter(next), _id: { $ne: doc._id } }))) {
         throw ApiError.conflict(`${label} "${next.name}" already exists`, { name: `${label} already exists` });
       }
       doc.set(d); // slug intentionally stays stable so existing links keep working

@@ -89,9 +89,12 @@ export const update = asyncHandler(async (req, res) => {
   const b = req.validated.body;
   const doc = await load(req.validated.params.id);
   await assertRefs({ city: b.address?.city, cuisines: b.cuisines, amenities: b.amenities });
+  // undefined = not sent -> skip; ""/null = cleared -> written as null. Nested objects use dot paths so siblings survive.
   for (const [k, v] of Object.entries(b)) {
-    if ((k === 'address' || k === 'externalLinks') && v) for (const [sk, sv] of Object.entries(v)) doc.set(`${k}.${sk}`, sv);
-    else doc.set(k, v);
+    if (v === undefined) continue;
+    if ((k === 'address' || k === 'externalLinks') && v) {
+      for (const [sk, sv] of Object.entries(v)) if (sv !== undefined) doc.set(`${k}.${sk}`, sv);
+    } else doc.set(k, v);
   }
   if (b.priceForTwo !== undefined) doc.costBracket = costBracketOf(b.priceForTwo);
   await doc.save();

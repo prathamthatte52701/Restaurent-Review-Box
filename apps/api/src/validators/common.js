@@ -16,4 +16,5 @@ export const listQuery = z.object({
   includeInactive: z.enum(['true', 'false']).optional(),
 });
 
-export const blankToUndef = (v) => (v === '' || v === null ? undefined : v);
+/** "" -> null (cleared); undefined stays undefined (not sent); null stays null. */
+export const blankToNull = (v) => (v === '' ? null : v);

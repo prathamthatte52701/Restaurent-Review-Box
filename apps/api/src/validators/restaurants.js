@@ -1,14 +1,14 @@
 import { z } from 'zod';
 import { DAYS, TYPES, CATEGORIES, BRACKETS } from '../models/Restaurant.js';
-import { objectId, listQuery, blankToUndef } from './common.js';
+import { objectId, listQuery, blankToNull } from './common.js';
 
 // ---------- helpers ----------
-const optStr = (max) => z.preprocess(blankToUndef, z.string().trim().max(max).optional());
+const optStr = (max) => z.preprocess(blankToNull, z.string().trim().max(max).nullish());
 const hostIs = (h, d) => h === d || h.endsWith(`.${d}`);
 
 function urlField(label, check) {
   return z.preprocess(
-    blankToUndef,
+    blankToNull,
     z
       .string()
       .trim()
@@ -21,7 +21,7 @@ function urlField(label, check) {
           return false;
         }
       }, `Must be a valid ${label} URL`)
-      .optional(),
+      .nullish(),
   );
 }
 
@@ -58,7 +58,8 @@ const timing = z
 const timings = z
   .array(timing)
   .length(7, 'Provide all 7 days')
-  .refine((a) => new Set(a.map((t) => t.day)).size === 7, 'Each day must appear exactly once');
+  .refine((a) => new Set(a.map((t) => t.day)).size === 7, 'Each day must appear exactly once')
+  .or(z.array(z.never()).length(0)); // [] clears all timings
 
 const addr = (city) =>
   z.object({
@@ -66,19 +67,19 @@ const addr = (city) =>
     line2: optStr(200),
     area: optStr(100),
     city,
-    pincode: z.preprocess(blankToUndef, z.string().trim().regex(/^\d{6}$/, 'Pincode must be 6 digits').optional()),
+    pincode: z.preprocess(blankToNull, z.string().trim().regex(/^\d{6}$/, 'Pincode must be 6 digits').nullish()),
   });
 
 const core = {
   name: z.string().trim().min(2, 'Name must be at least 2 characters').max(120),
   description: optStr(3000),
   ownerName: optStr(80),
-  contactPhone: z.preprocess(blankToUndef, z.string().trim().regex(/^[+()\d\s-]{7,20}$/, 'Enter a valid phone number').optional()),
-  contactEmail: z.preprocess(blankToUndef, z.string().trim().toLowerCase().email('Enter a valid email').optional()),
+  contactPhone: z.preprocess(blankToNull, z.string().trim().regex(/^[+()\d\s-]{7,20}$/, 'Enter a valid phone number').nullish()),
+  contactEmail: z.preprocess(blankToNull, z.string().trim().toLowerCase().email('Enter a valid email').nullish()),
   location,
   type: z.enum(TYPES),
   category: z.enum(CATEGORIES),
-  establishedYear: z.number().int().min(1800).max(new Date().getFullYear()).optional(),
+  establishedYear: z.number().int().min(1800).max(new Date().getFullYear()).nullish(),
   priceForTwo: z.number({ invalid_type_error: 'priceForTwo must be a number' }).positive('priceForTwo must be greater than 0').max(1_000_000),
   timings: timings.optional(),
   externalLinks: externalLinks.optional(),

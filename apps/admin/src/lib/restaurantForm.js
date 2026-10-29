@@ -112,10 +112,10 @@ export function fromServer(r) {
   };
 }
 
-/** Form values -> API body. costBracket is server-derived and never sent. Blank optionals are omitted. */
+/** Form values -> API body. costBracket is server-derived and never sent. Emptied optionals are SENT as null so the API clears them. */
 export function toPayload(v) {
-  const opt = (x) => (x === '' || x == null ? undefined : x);
-  const links = Object.fromEntries(Object.entries(v.externalLinks).filter(([, x]) => x));
+  const opt = (x) => (x === '' || x == null ? null : x);
+  const links = Object.fromEntries(Object.entries(v.externalLinks).map(([k, x]) => [k, opt(x.trim())]));
   return {
     name: v.name.trim(),
     description: opt(v.description.trim()),
@@ -126,11 +126,11 @@ export function toPayload(v) {
     location: { type: 'Point', coordinates: [Number(v.lng), Number(v.lat)] },
     type: v.type,
     category: v.category,
-    establishedYear: v.establishedYear ? Number(v.establishedYear) : undefined,
+    establishedYear: v.establishedYear ? Number(v.establishedYear) : null,
     priceForTwo: Number(v.priceForTwo),
     timings: v.timings.map((t) => (t.isClosed ? { day: t.day, isClosed: true } : { day: t.day, isClosed: false, openTime: t.openTime, closeTime: t.closeTime })),
     cuisines: v.cuisines,
     amenities: v.amenities,
-    externalLinks: Object.keys(links).length ? links : undefined,
+    externalLinks: links,
   };
 }

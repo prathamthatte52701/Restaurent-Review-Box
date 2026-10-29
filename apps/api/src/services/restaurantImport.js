@@ -77,7 +77,7 @@ async function resolveMasters(valid, { autoCreate, dryRun, cache }) {
       if (dryRun) cityMap.set(k, `dry:${k}`);
       else {
         try {
-          cityMap.set(k, (await createWithSlug(City, toSlug(c.name), { name: c.name, state: c.state || '' }))._id);
+          cityMap.set(k, (await createWithSlug(City, toSlug(c.name), { name: c.name, state: c.state || null }))._id);
         } catch (err) {
           if (err?.code !== 11000) throw err;
           const again = await City.find({ name: c.name }).collation(ci).lean();
