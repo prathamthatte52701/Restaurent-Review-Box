@@ -182,7 +182,8 @@ test("another user's token yields only that user's data; role claim in token is 
   const me = await ctx.request.get(`${A}/me`).set(auth(b.token));
   assert.equal(me.body.data.user.email, 'second@example.com');
   assert.notEqual(me.body.data.user._id, a.id);
-  const forged = jwt.sign({ sub: a.id, role: 'admin' }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  const jti = (await ctx.models.User.findById(a.id)).sessions[0].jti;
+  const forged = jwt.sign({ sub: a.id, role: 'admin', jti, tokenVersion: 0 }, process.env.JWT_SECRET, { expiresIn: '1h' });
   const res = await ctx.request.get(`${A}/me`).set(auth(forged));
   assert.equal(res.body.data.user.role, 'user');
 });

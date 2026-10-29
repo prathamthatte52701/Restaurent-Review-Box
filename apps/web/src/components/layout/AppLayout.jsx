@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { KeyRound, LogOut, Menu, User } from 'lucide-react';
+import { KeyRound, LogOut, Menu, ShieldOff, User } from 'lucide-react';
 import { Avatar, Button, Container, DropdownMenu, IconButton, Logo, SearchInput, Sheet, ThemeToggle, cn } from '@rrb/ui';
 import { useAuth } from '../../store/auth.js';
-import { useLogout } from '../../hooks/auth.js';
+import { useLogout, useLogoutAll } from '../../hooks/auth.js';
 
 const NAV = [
   { to: '/', label: 'Home', end: true },
@@ -34,7 +34,9 @@ function UserMenu() {
   const user = useAuth((s) => s.user);
   const navigate = useNavigate();
   const logout = useLogout();
+  const logoutAll = useLogoutAll();
   const out = () => logout.mutate(undefined, { onSettled: () => navigate('/', { replace: true }) });
+  const outAll = () => logoutAll.mutate(undefined, { onSettled: () => navigate('/', { replace: true }) });
   return (
     <DropdownMenu
       label="Account menu"
@@ -49,6 +51,7 @@ function UserMenu() {
         { label: 'Change password', icon: <KeyRound />, onSelect: () => navigate('/change-password') },
         { type: 'separator' },
         { label: 'Log out', icon: <LogOut />, danger: true, onSelect: out },
+        { label: 'Log out of all devices', icon: <ShieldOff />, danger: true, onSelect: outAll },
       ]}
     />
   );

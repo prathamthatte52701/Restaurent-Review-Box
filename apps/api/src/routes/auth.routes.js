@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import { validate } from '../middlewares/validate.js';
-import { protect } from '../middlewares/auth.js';
+import { protect, optionalAuth } from '../middlewares/auth.js';
 import { loginLimiter, registerLimiter, forgotLimiter, resendLimiter } from '../middlewares/rateLimit.js';
+import { idParam } from '../validators/common.js';
 import * as v from '../validators/auth.js';
 import * as c from '../controllers/authController.js';
 
@@ -10,7 +11,10 @@ r.post('/register', registerLimiter, validate({ body: v.registerBody }), c.regis
 r.post('/verify-otp', validate({ body: v.verifyOtpBody }), c.verifyOtp);
 r.post('/resend-otp', resendLimiter, validate({ body: v.emailBody }), c.resendOtp);
 r.post('/login', loginLimiter, validate({ body: v.loginBody }), c.login);
-r.post('/logout', c.logout);
+r.post('/logout', optionalAuth, c.logout);
+r.post('/logout-all', protect, c.logoutAll);
+r.get('/sessions', protect, c.listSessions);
+r.delete('/sessions/:id', protect, validate({ params: idParam }), c.deleteSession);
 r.get('/me', protect, c.me);
 r.post('/forgot-password', forgotLimiter, validate({ body: v.forgotBody }), c.forgotPassword);
 r.post('/reset-password', validate({ body: v.resetBody }), c.resetPassword);

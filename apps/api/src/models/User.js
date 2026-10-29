@@ -26,13 +26,28 @@ const userSchema = new mongoose.Schema(
     passwordResetTokenHash: { type: String, ...hidden },
     passwordResetExpires: { type: Date, ...hidden },
     passwordChangedAt: { type: Date },
+    // one entry per logged-in device; `jti` is the token id and is never sent to clients (the subdoc _id is the public id)
+    sessions: {
+      type: [
+        {
+          jti: { type: String, required: true },
+          device: { type: String, default: 'Unknown device' },
+          ip: String,
+          createdAt: { type: Date, default: Date.now },
+          lastUsedAt: { type: Date, default: Date.now },
+          expiresAt: { type: Date, required: true },
+        },
+      ],
+      default: [],
+    },
+    tokenVersion: { type: Number, default: 0 },
     lastLoginAt: { type: Date },
   },
   {
     timestamps: true,
     toJSON: {
       transform(doc, ret) {
-        for (const k of ['password', 'otp', 'passwordResetTokenHash', 'passwordResetExpires', 'passwordChangedAt', '__v']) delete ret[k];
+        for (const k of ['password', 'otp', 'passwordResetTokenHash', 'passwordResetExpires', 'passwordChangedAt', 'sessions', 'tokenVersion', '__v']) delete ret[k];
         return ret;
       },
     },

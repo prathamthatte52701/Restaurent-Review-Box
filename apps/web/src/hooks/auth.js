@@ -44,6 +44,15 @@ export const useLogout = () => {
   });
 };
 
+export const useLogoutAll = () => {
+  const clear = useAuth((s) => s.clear);
+  return useMutation({
+    meta: silent,
+    mutationFn: async () => { try { await api.post('/auth/logout-all'); } catch { /* local logout must always succeed */ } },
+    onSettled: () => { clear(); queryClient.clear(); },
+  });
+};
+
 export const useForgotPassword = () => useMutation({ meta: silent, mutationFn: async (b) => (await api.post('/auth/forgot-password', b)).data });
 export const useResetPassword = () => useMutation({ meta: silent, mutationFn: async (b) => (await api.post('/auth/reset-password', b)).data });
 export const useChangePassword = () => {

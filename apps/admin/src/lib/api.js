@@ -23,6 +23,14 @@ api.interceptors.request.use((cfg) => {
   return cfg;
 });
 
+const SESSION_MESSAGES = {
+  SESSION_REVOKED: ['Signed out', 'You were logged out on another device. Please sign in again.'],
+  PASSWORD_CHANGED: ['Password changed', 'Your password was changed, so you were signed out everywhere. Please sign in again.'],
+  ACCOUNT_DISABLED: ['Account disabled', 'Your account has been disabled. Contact support if this is a mistake.'],
+  TOKEN_EXPIRED: ['Session expired', 'Your session expired. Please sign in again.'],
+};
+const sessionMessage = (code) => SESSION_MESSAGES[code] || ['Session ended', 'Please sign in again to continue.'];
+
 let sessionNoticeShown = false;
 api.interceptors.response.use(
   (res) => {
@@ -49,7 +57,8 @@ api.interceptors.response.use(
       onUnauthorized();
       if (!sessionNoticeShown) {
         sessionNoticeShown = true;
-        notify.info({ title: 'Session ended', message: 'Please sign in again to continue.' }).then(() => { sessionNoticeShown = false; });
+        const [title, msg] = sessionMessage(body?.errors?.code);
+        notify.info({ title, message: msg }).then(() => { sessionNoticeShown = false; });
       }
     }
     return Promise.reject(e);

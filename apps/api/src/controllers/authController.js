@@ -4,7 +4,7 @@ import { env } from '../config/env.js';
 import { ApiError } from '../utils/ApiError.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { sendOk } from '../utils/response.js';
-import { signToken } from '../utils/jwt.js';
+import { startSession, buildSession } from '../services/sessions.js';
 import { generateOtp, hmac, safeEqual, randomToken, OTP_TTL_MS, OTP_MAX_ATTEMPTS, RESET_TTL_MS } from '../utils/crypto.js';
 import { sendOtpMail, sendResetMail } from '../services/mail.js';
 
@@ -76,7 +76,7 @@ export const verifyOtp = asyncHandler(async (req, res) => {
   user.lastLoginAt = new Date();
   await user.save();
   await User.updateOne({ _id: user._id }, { $unset: { otp: 1 } });
-  sendOk(res, { token: signToken(user), user }, 'Email verified');
+  sendOk(res, { token: await startSession(user, req), user }, 'Email verified');
 });
 
 export const resendOtp = asyncHandler(async (req, res) => {
@@ -96,10 +96,34 @@ export const login = asyncHandler(async (req, res) => {
     throw new ApiError(403, 'Please verify your email first. Enter the code we sent you.', { requiresVerification: true, email: user.email });
   }
   await User.updateOne({ _id: user._id }, { lastLoginAt: new Date() });
-  sendOk(res, { token: signToken(user), user }, 'Logged in');
+  sendOk(res, { token: await startSession(user, req), user }, 'Logged in');
 });
 
-export const logout = (req, res) => sendOk(res, null, 'Logged out');
+// optionalAuth: a dead token still gets a clean 200
+export const logout = asyncHandler(async (req, res) => {
+  if (req.user) await User.updateOne({ _id: req.user._id }, { $pull: { sessions: { jti: req.jti } } });
+  sendOk(res, null, 'Logged out');
+});
+
+export const logoutAll = asyncHandler(async (req, res) => {
+  await User.updateOne({ _id: req.user._id }, { $set: { sessions: [] } });
+  sendOk(res, null, 'Logged out of all devices');
+});
+
+/** Public session ids are the subdocument _id; the raw jti never leaves the server. */
+export const listSessions = (req, res) => {
+  const data = req.user.sessions
+    .map((s) => ({ id: String(s._id), device: s.device, ip: s.ip, createdAt: s.createdAt, lastUsedAt: s.lastUsedAt, current: s.jti === req.jti }))
+    .sort((a, b) => b.lastUsedAt - a.lastUsedAt);
+  sendOk(res, data, 'OK');
+};
+
+export const deleteSession = asyncHandler(async (req, res) => {
+  const { id } = req.validated.params;
+  const r = await User.updateOne({ _id: req.user._id, 'sessions._id': id }, { $pull: { sessions: { _id: id } } });
+  if (!r.matchedCount) throw ApiError.notFound('Session not found');
+  sendOk(res, null, 'Session removed');
+});
 
 export const me = (req, res) => sendOk(res, { user: req.user }, 'OK');
 
@@ -131,6 +155,8 @@ export const resetPassword = asyncHandler(async (req, res) => {
   if (!user) throw ApiError.badRequest('This reset link is invalid or has already been used.');
   user.password = newPassword;
   user.isEmailVerified = true; // they proved control of the mailbox
+  user.tokenVersion += 1; // every device is logged out
+  user.sessions = [];
   await user.save();
   sendOk(res, null, 'Password updated. You can now log in.');
 });
@@ -141,8 +167,11 @@ export const changePassword = asyncHandler(async (req, res) => {
   if (!(await user.comparePassword(currentPassword))) throw ApiError.badRequest('Current password is incorrect', { currentPassword: 'Current password is incorrect' });
   if (currentPassword === newPassword) throw ApiError.badRequest('New password must be different', { newPassword: 'New password must be different' });
   user.password = newPassword;
+  user.tokenVersion += 1;
+  const { token, session } = buildSession(user, req);
+  user.sessions = [session]; // every other device is logged out; this one continues
   await user.save();
-  sendOk(res, { token: signToken(user) }, 'Password changed');
+  sendOk(res, { token }, 'Password changed');
 });
 
 export const checkUsername = asyncHandler(async (req, res) => {

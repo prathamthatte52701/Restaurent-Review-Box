@@ -23,14 +23,22 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+const SESSION_MESSAGES = {
+  SESSION_REVOKED: ['Signed out', 'You were logged out on another device. Please sign in again.'],
+  PASSWORD_CHANGED: ['Password changed', 'Your password was changed, so you were signed out everywhere. Please sign in again.'],
+  ACCOUNT_DISABLED: ['Account disabled', 'Your account has been disabled. Contact support if this is a mistake.'],
+  TOKEN_EXPIRED: ['Session expired', 'Your session expired. Please sign in again.'],
+};
+const sessionMessage = (code) => SESSION_MESSAGES[code] || ['Session ended', 'Please sign in again to continue.'];
+
 let sessionNoticeAt = 0;
-function sessionExpired() {
+function sessionExpired(code) {
   onUnauthorized?.();
   if (Date.now() - sessionNoticeAt < 5000) return;
   sessionNoticeAt = Date.now();
   const here = window.location.pathname + window.location.search;
   if (!here.startsWith('/login')) navigateFn?.(`/login?next=${encodeURIComponent(here)}`, { replace: true });
-  notify.error('Session ended', 'Please sign in again to continue.');
+  notify.error(...sessionMessage(code));
 }
 
 /** Turn any axios failure into an Error with readable .message, .status, .errors (string field map). */
@@ -47,8 +55,9 @@ export function normalizeError(err) {
   const raw = body.errors && typeof body.errors === 'object' ? body.errors : {};
   const errors = Object.fromEntries(Object.entries(raw).filter(([, v]) => typeof v === 'string'));
   const e = new Error(message);
-  Object.assign(e, { isApiError: true, status, errors, network: !res, requiresVerification: raw.requiresVerification === true, email: typeof raw.email === 'string' && raw.requiresVerification ? raw.email : undefined });
+  Object.assign(e, { isApiError: true, status, errors, code: typeof raw.code === 'string' ? raw.code : undefined, network: !res, requiresVerification: raw.requiresVerification === true, email: typeof raw.email === 'string' && raw.requiresVerification ? raw.email : undefined });
   if (raw.requiresVerification) delete e.errors.email;
+  delete e.errors.code;
   return e;
 }
 
@@ -63,7 +72,7 @@ api.interceptors.response.use(
     const cfg = err?.config;
     if (e.status === 401 && cfg?.headers?.Authorization && !PUBLIC_AUTH.test(cfg.url || '')) {
       if (cfg.silentAuth) onUnauthorized?.(); // boot hydration with a bad token: clean logout, no noise
-      else sessionExpired();
+      else sessionExpired(e.code);
     }
     return Promise.reject(e);
   },

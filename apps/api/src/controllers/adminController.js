@@ -1,4 +1,6 @@
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { z } from 'zod';
+import { ApiError } from '../utils/ApiError.js';
 import { sendOk } from '../utils/response.js';
 import { User, City, Cuisine, Amenity, Restaurant } from '../models/index.js';
 
@@ -34,3 +36,16 @@ export const stats = asyncHandler(async (req, res) => {
     restaurantsPerMonth,
   });
 });
+
+/** Deactivating a user also kills every session they have, immediately. */
+export const setUserActive = asyncHandler(async (req, res) => {
+  const { isActive } = req.validated.body;
+  const id = req.validated.params.id;
+  if (!isActive && String(req.user._id) === id) throw ApiError.badRequest('You cannot deactivate your own account');
+  const update = isActive ? { isActive } : { isActive, sessions: [] };
+  const user = await User.findByIdAndUpdate(id, update, { new: true });
+  if (!user) throw ApiError.notFound('User not found');
+  sendOk(res, { user }, isActive ? 'User activated' : 'User deactivated');
+});
+
+export const setUserActiveBody = z.object({ isActive: z.boolean() });
