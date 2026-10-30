@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { KeyRound, LogOut, Menu, ShieldOff, User } from 'lucide-react';
-import { Avatar, Button, Container, DropdownMenu, IconButton, Logo, SearchInput, Sheet, ThemeToggle, cn } from '@rrb/ui';
+import { Avatar, Button, Container, DropdownMenu, IconButton, Logo, Sheet, ThemeToggle, cn } from '@rrb/ui';
+import { GlobalSearch } from '../search/GlobalSearch.jsx';
 import { useAuth } from '../../store/auth.js';
 import { useLogout, useLogoutAll } from '../../hooks/auth.js';
 
@@ -12,23 +13,6 @@ const NAV = [
 
 const navCls = ({ isActive }) =>
   cn('rounded-md px-3 py-2 text-sm font-medium transition-colors duration-fast', isActive ? 'bg-primary-soft text-primary' : 'text-text-muted hover:bg-text/[0.06] hover:text-text');
-
-function HeaderSearch({ className }) {
-  const navigate = useNavigate();
-  return (
-    <form
-      role="search"
-      className={className}
-      onSubmit={(e) => {
-        e.preventDefault();
-        const q = new FormData(e.currentTarget).get('q')?.toString().trim();
-        navigate(q ? `/restaurants?q=${encodeURIComponent(q)}` : '/restaurants');
-      }}
-    >
-      <SearchInput name="q" placeholder="Search restaurants, dishes, areas" />
-    </form>
-  );
-}
 
 function UserMenu() {
   const user = useAuth((s) => s.user);
@@ -89,7 +73,7 @@ function MobileMenu() {
     >
       <Sheet.Header title={<Logo size="sm" />} />
       <Sheet.Body className="flex flex-col gap-6">
-        <HeaderSearch />
+        <GlobalSearch onNavigate={close} />
         <nav aria-label="Main" className="flex flex-col gap-1">
           {NAV.map((n) => <NavLink key={n.to} to={n.to} end={n.end} onClick={close} className={navCls}>{n.label}</NavLink>)}
           {isAuthenticated ? (
@@ -123,8 +107,8 @@ function Header() {
         <nav aria-label="Main" className="ml-4 hidden items-center gap-1 md:flex">
           {NAV.map((n) => <NavLink key={n.to} to={n.to} end={n.end} className={navCls}>{n.label}</NavLink>)}
         </nav>
-        <HeaderSearch className="ml-auto hidden w-full max-w-xs lg:block" />
-        <div className="ml-auto flex items-center gap-2 lg:ml-0">
+        <GlobalSearch className="ml-auto hidden w-full max-w-[14rem] md:block lg:max-w-sm" />
+        <div className="ml-auto flex items-center gap-2 md:ml-0">
           <ThemeToggle />
           <div className="hidden md:block"><AuthActions /></div>
           <div className="md:hidden"><MobileAvatar /></div>

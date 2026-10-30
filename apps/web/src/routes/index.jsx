@@ -6,7 +6,8 @@ import { GuestRoute, ProtectedRoute } from './guards.jsx';
 import { setNavigator } from '../lib/api.js';
 const Home = lazy(() => import('../pages/Home.jsx'));
 const UiKit = lazy(() => import('../pages/UiKit.jsx'));
-const Restaurants = lazy(() => import('../pages/Placeholders.jsx').then((m) => ({ default: m.Restaurants })));
+const Restaurants = lazy(() => import('../pages/Restaurants.jsx'));
+const RestaurantDetail = lazy(() => import('../pages/RestaurantDetail.jsx'));
 const Profile = lazy(() => import('../pages/Placeholders.jsx').then((m) => ({ default: m.Profile })));
 const NotFound = lazy(() => import('../pages/Placeholders.jsx').then((m) => ({ default: m.NotFound })));
 const Login = lazy(() => import('../pages/auth/Login.jsx'));
@@ -44,6 +45,7 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <S><Home /></S> },
           { path: 'restaurants', element: <S><Restaurants /></S> },
+          { path: 'restaurants/:slug', element: <S><RestaurantDetail /></S> },
           { path: 'ui-kit', element: <S><UiKit /></S> },
           { element: <ProtectedRoute />, children: [{ path: 'profile', element: <S><Profile /></S> }, { path: 'change-password', element: <S><ChangePassword /></S> }] },
           { path: '*', element: <S><NotFound /></S> },

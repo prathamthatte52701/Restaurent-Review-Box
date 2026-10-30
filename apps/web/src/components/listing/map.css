@@ -1,0 +1,28 @@
+/* Leaflet inside Tailwind: preflight's img{max-width:100%} corrupts tiles */
+.leaflet-container img { max-width: none !important; max-height: none !important; }
+.leaflet-container { font: inherit; background: rgb(var(--surface)); z-index: 0; }
+
+.rrb-pin { background: none; border: 0; }
+.rrb-pin span {
+  display: block; width: 30px; height: 30px; margin: 0 auto;
+  border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+  background: rgb(var(--primary)); border: 3px solid rgb(var(--surface-raised));
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.35);
+}
+.rrb-pin span::after { content: ''; position: absolute; left: 50%; top: 50%; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: rgb(var(--primary-fg)); }
+.rrb-me span { display: block; width: 18px; height: 18px; border-radius: 50%; background: #2563eb; border: 3px solid #fff; box-shadow: 0 0 0 6px rgb(37 99 235 / 0.25); }
+
+.marker-cluster-small, .marker-cluster-medium, .marker-cluster-large { background-color: rgb(var(--primary) / 0.28); }
+.marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div { background-color: rgb(var(--primary)); color: rgb(var(--primary-fg)); font-weight: 600; }
+
+.leaflet-popup-content-wrapper { background: rgb(var(--surface-overlay)); color: rgb(var(--text)); border-radius: 12px; border: 1px solid rgb(var(--border)); }
+.leaflet-popup-tip { background: rgb(var(--surface-overlay)); }
+.leaflet-popup-content { margin: 12px 14px; }
+.rrb-pop-title { display: block; font-family: "Fraunces Variable", Georgia, serif; font-size: 1rem; font-weight: 500; color: rgb(var(--text)); text-decoration: none; }
+.rrb-pop-title:hover { text-decoration: underline; }
+.rrb-pop-meta, .rrb-pop-open { margin: 4px 0 0 !important; font-size: 0.75rem; line-height: 1.1rem; color: rgb(var(--text-muted)); }
+.rrb-pop-open { color: rgb(var(--success)); }
+.rrb-pop-link { display: inline-block; margin-top: 8px; font-size: 0.8125rem; font-weight: 500; color: rgb(var(--primary)); text-decoration: none; }
+.rrb-pop-link:hover { text-decoration: underline; }
+.leaflet-container a.leaflet-popup-close-button { color: rgb(var(--text-muted)); }
+[data-theme="dark"] .leaflet-tile-pane { filter: brightness(0.72) contrast(1.05) saturate(0.85); }

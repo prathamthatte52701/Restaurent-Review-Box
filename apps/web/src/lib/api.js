@@ -64,8 +64,8 @@ export function normalizeError(err) {
 api.interceptors.response.use(
   (res) => {
     const b = res.data;
-    if (b && typeof b === 'object' && 'success' in b) return { data: b.data, message: b.message, pagination: b.pagination };
-    return { data: b, message: undefined, pagination: undefined };
+    if (b && typeof b === 'object' && 'success' in b) return { data: b.data, message: b.message, pagination: b.pagination, facets: b.facets, center: b.center };
+    return { data: b, message: undefined, pagination: undefined, facets: undefined, center: undefined };
   },
   (err) => {
     const e = normalizeError(err);

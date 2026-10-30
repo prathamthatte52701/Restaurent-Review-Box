@@ -1,22 +1,7 @@
 import { Link } from 'react-router-dom';
-import { Compass, Home, UserRound, UtensilsCrossed } from 'lucide-react';
+import { Compass, Home, UserRound } from 'lucide-react';
 import { Button, Container, EmptyState, PageHeader } from '@rrb/ui';
 import { useAuth } from '../store/auth.js';
-
-export function Restaurants() {
-  return (
-    <Container size="xl" className="py-10">
-      <PageHeader eyebrow="Discover" title="Restaurants" description="Search and filters are coming in the next release." />
-      <EmptyState
-        className="rounded-lg border border-dashed border-border-strong"
-        icon={<UtensilsCrossed className="h-5 w-5" />}
-        title="The restaurant directory is being plated"
-        description="We're finishing the listings. Come back soon, or create an account to be first in line."
-        action={<Button as={Link} to="/signup">Create account</Button>}
-      />
-    </Container>
-  );
-}
 
 export function Profile() {
   const user = useAuth((s) => s.user);
